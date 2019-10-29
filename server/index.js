@@ -12,28 +12,27 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.use(cors());
 app.use(bodyParser());
 
+// This route should take the github username provided and get the repo information from the github API, then save the repo information in the database
 app.post('/repos', function (req, res) {
   console.log(`req.body: `, req.body);
   const term = req.body.term;
 
-  // ({ term } = { req.body })
+  // ({ term } = { req.body }) // TODO: why does this syntax not work ??
 
   helpers.getReposByUsername(term, (err, data) => {
     if (err) { return console.log(err); }
     db.save(data, (err, data) => {
       if (err) { return console.log(err); }
       console.log('data saved!'); // TODO: send some response to the client? to let it know the data was saved??
-      db.find((err, data) => {
-        if (err) { return console.log(err); }
-        console.log(data);
-      })
+
+
+      // so we can log the documents that were just added
+      // db.find((err, data) => {
+      //   if (err) { return console.log(err); }
+      //   console.log(data);
+      // })
     });
   });
-
-  // TODO - your code here!
-  // This route should take the github username provided
-  // and get the repo information from the github API, then
-  // save the repo information in the database
 });
 
 app.get('/repos', function (req, res) {

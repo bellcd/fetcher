@@ -31,13 +31,13 @@ let repoSchema = mongoose.Schema({
 let Repo = mongoose.model('Repo', repoSchema);
 
 let save = (repos, callback) => {
-  // TODO: Your code here
-  // This function should save a repo or repos to the MongoDB
+  let docs = [];
 
-  let docs = repos.map(repo => {
-    // console.log('repo: ', repo);
+  // TODO: feels like Mongoose would have a prebuilt solution for checking for duplicates when adding a collection of documents ...
+  for (let i = 0; i < repos.length; i++) {
+    let repo = repos[i];
 
-    return {
+    let doc = {
       id: repo.id,
       name: repo.name,
       updated_at: repo.updated_at,
@@ -48,14 +48,26 @@ let save = (repos, callback) => {
       owner_html_url: repo.owner.html_url,
       owner_avatar_url: repo.owner.avatar_url
     }
-  });
 
-  // console.log('docs: ', docs);
+    Repo.findOne({ id: doc.id }, (err, data) => {
+      if (err) { return console.log(err); }
 
-  Repo.create(docs, (err, ...docs) => {
-    if (err) { return callback(err, null); }
-    callback(null, docs);
-  });
+      // the db doesn't already contain a document for that repo, so add it to the array that will get added to the db
+      if (data === null) {
+        docs.push(doc);
+      } else {
+        // the repo already exists in the db, do DO NOT add it
+      }
+
+      // we've filtered the list of repos to only non-duplicates, so now we can add them to the db
+      if (i === repos.length - 1) {
+        Repo.create(docs, (err, ...docs) => {
+          if (err) { return callback(err, null); }
+          callback(null, docs);
+        });
+      };
+    });
+  }
 }
 
 let find = (callback) => {
