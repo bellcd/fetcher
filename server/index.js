@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const helpers = require('../helpers/github.js');
+const db = require('../database/index.js');
 
 let app = express();
 
@@ -18,8 +19,15 @@ app.post('/repos', function (req, res) {
   // ({ term } = { req.body })
 
   helpers.getReposByUsername(term, (err, data) => {
-    if (err) { return console.log(err) }
-    console.log(data);
+    if (err) { return console.log(err); }
+    db.save(data, (err, data) => {
+      if (err) { return console.log(err); }
+      console.log('data saved!'); // TODO: send some response to the client? to let it know the data was saved??
+      db.find((err, data) => {
+        if (err) { return console.log(err); }
+        console.log(data);
+      })
+    });
   });
 
   // TODO - your code here!
