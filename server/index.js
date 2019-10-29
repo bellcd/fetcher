@@ -38,12 +38,13 @@ app.get('/repos', function (req, res) {
 
     // sorting in place without making a copy, acceptable here??
     repos.sort((a, b) => {
-      return b.updated_at - a.updated_at
-      // console.log('date in original format: ', repo.updated_at);
-      // console.log('date through the Date constructor: ', new Date(repo.updated_at))
+      return b.updated_at - a.updated_at;
     });
 
-    res.send(JSON.stringify(repos))
+    // slice the top 25 repos
+    const top25Repos = repos.slice(0, 26);
+
+    res.send(JSON.stringify(top25Repos));
   })
 });
 
