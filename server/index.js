@@ -24,13 +24,6 @@ app.post('/repos', function (req, res) {
     db.save(data, (err, data) => {
       if (err) { return console.log(err); }
       console.log('data saved!'); // TODO: send some response to the client? to let it know the data was saved??
-
-
-      // so we can log the documents that were just added
-      // db.find((err, data) => {
-      //   if (err) { return console.log(err); }
-      //   console.log(data);
-      // })
     });
   });
 });
@@ -38,6 +31,20 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
+
+  // so we can log the documents that were just added
+  db.find((err, repos) => {
+    if (err) { return console.log(err); }
+
+    // sorting in place without making a copy, acceptable here??
+    repos.sort((a, b) => {
+      return b.updated_at - a.updated_at
+      // console.log('date in original format: ', repo.updated_at);
+      // console.log('date through the Date constructor: ', new Date(repo.updated_at))
+    });
+
+    res.send(JSON.stringify(repos))
+  })
 });
 
 let port = 1128;

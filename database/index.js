@@ -60,7 +60,7 @@ let save = (repos, callback) => {
       }
 
       // we've filtered the list of repos to only non-duplicates, so now we can add them to the db
-      if (i === repos.length - 1) {
+      if (i === repos.length - 1) { // TODO: need to change this such that the counter accessible to all of the callbacks is the same number, that gets incremented after each repo is either found or not in the db
         Repo.create(docs, (err, ...docs) => {
           if (err) { return callback(err, null); }
           callback(null, docs);
@@ -73,7 +73,7 @@ let save = (repos, callback) => {
 let find = (callback) => {
   Repo.find((err, data) => {
     if (err) { return callback(err, data) }
-    console.log(null, data);
+    callback(null, data);
   })
 }
 
