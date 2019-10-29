@@ -24,6 +24,8 @@ app.post('/repos', function (req, res) {
     db.save(data, (err, data) => {
       if (err) { return console.log(err); }
       console.log('data saved!'); // TODO: send some response to the client? to let it know the data was saved??
+      res.status(200);
+      res.send();
     });
   });
 });
@@ -42,7 +44,7 @@ app.get('/repos', function (req, res) {
     });
 
     // slice the top 25 repos
-    const top25Repos = repos.slice(0, 26);
+    const top25Repos = repos.slice(0, 25);
 
     res.send(JSON.stringify(top25Repos));
   })

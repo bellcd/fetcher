@@ -72,7 +72,7 @@ let save = (repos, callback) => {
 
 let find = (callback) => {
   Repo.find((err, data) => {
-    if (err) { return callback(err, data) }
+    if (err) { return callback(err, null) }
     callback(null, data);
   })
 }

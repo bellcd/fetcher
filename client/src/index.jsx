@@ -14,6 +14,11 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.updateTop25Repos();
+  }
+
+  // TODO: I **think** this needs to be a bound function for the this.setState call inside of it to work properly ...
+  updateTop25Repos() {
     $.ajax({
       url: `http://localhost:1128/repos`,
       method: 'GET',
@@ -37,11 +42,13 @@ class App extends React.Component {
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({ term }),
+      dataType: 'text', // TODO: why does success() not fire when this is set to json??
       success: () => {
-        console.log('data sent to server')
+        console.log('data successfully sent to server');
+        this.updateTop25Repos(); // TODO: this seems to cause a brief flash, visible to the end user. How do I prevent this ??
       },
-      error: () => {
-        console.log('error');
+      error: (err) => {
+        console.log(err);
       }
     })
   }
