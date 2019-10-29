@@ -17,7 +17,7 @@ class App extends React.Component {
     this.updateTop25Repos();
   }
 
-  // TODO: I **think** this needs to be a bound function for the this.setState call inside of it to work properly ...
+  // TODO: why does this function not need to be bound? (setState call inside it ...)
   updateTop25Repos() {
     $.ajax({
       url: `http://localhost:1128/repos`,
