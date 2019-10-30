@@ -32,6 +32,27 @@ let save = (repos, callback) => {
   let docs = [];
 
   // TODO: feels like Mongoose would have a prebuilt solution for checking for duplicates when adding a collection of documents ...
+
+  // map to a new array of objects with only the properties I want
+  // recursive fn
+    // base case, array of objects to check is empty, call final callback
+    // recursive case
+      // invoke findOne() with if conditionals for updateOne()
+        // if data is null, document does NOT exist
+          // invoke create() with the current document
+          // in create's callback, invoke recursiveFn with the array of objects minus the one we just dealt with
+        // else if data is a document
+          // if document's updated_at property is NOT equal to this obj's updated_at property, the document needs to be updated
+            // invoke update() with the current document
+            // in update's callback, invoke recursiveFn with the array of objects minus the one we just dealt with
+          // else if updated both updated_at properties are equal, the obj is a duplicate of an already existing document
+            // invoke recursiveFn with the array of objects minus the one we just dealt with
+
+
+  const recursiveFn = () => {
+
+  }
+
   for (let i = 0; i < repos.length; i++) {
     let repo = repos[i];
 
@@ -51,19 +72,27 @@ let save = (repos, callback) => {
     // OPTION 2, can the array that Mongoose's Repo.create() accepts handle null OR {} as elements??
     // OPTION 3 ???
 
-    // TODO: Use a Mongo composite key so that it cheks the id along with the updated_at date as the unique identifier
+
     Repo.findOne({ id: doc.id }, (err, data) => {
       if (err) { return console.log(err); }
 
       // the db doesn't already contain a document for that repo, so add it to the array that will get added to the db
       if (data === null) {
         docs.push(doc);
+
+      // TODO: Refactor to use a Mongo composite key
       } else {
-        // the repo already exists in the db, do DO NOT add it
+        // the repo already exists in the db, check if the updated_at date of the document in the db matches the updated_at date of the object coming in from the API call
+        if (data.updated_at === doc.updated_at) {
+          // it's the same repo, do nothing
+        } else {
+          // the repo has been updated, replace the document in the db with the new document from the API call
+          Repo.updateOne({ id: doc.id }, data) ;
+        }
       }
 
       // we've filtered the list of repos to only non-duplicates, so now we can add them to the db
-      if (i === repos.length - 1) { // TODO: need to change this such that the counter accessible to all of the callbacks is the same number, that gets incremented after each repo is either found or not in the db
+      if (i === repos.length - 1) {
         Repo.create(docs, (err, ...docs) => {
           if (err) { return callback(err, null); }
           callback(null, docs);
