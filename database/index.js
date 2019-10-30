@@ -70,7 +70,7 @@ let save = (repos, callback) => {
             if (err) console.log(err);
 
             // in create's callback, invoke recursiveFn with the array of objects minus the one we just dealt with
-            recursiveFn(objects[0].slice(1), callback);
+            recursiveFn(objects.slice(1), callback);
           });
 
         // TODO: Refactor to use a Mongo composite key
