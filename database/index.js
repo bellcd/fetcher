@@ -9,8 +9,6 @@ db.once('open', () => {
 
 
 // TODO: add handling for a database connection error
-
-// TODO: is the keyword new needed here??
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
 
@@ -49,6 +47,11 @@ let save = (repos, callback) => {
       owner_avatar_url: repo.owner.avatar_url
     }
 
+    // OPTION 1, possible to send responses back to the front end after each callback finishes??
+    // OPTION 2, can the array that Mongoose's Repo.create() accepts handle null OR {} as elements??
+    // OPTION 3 ???
+
+    // TODO: Use a Mongo composite key so that it cheks the id along with the updated_at date as the unique identifier
     Repo.findOne({ id: doc.id }, (err, data) => {
       if (err) { return console.log(err); }
 

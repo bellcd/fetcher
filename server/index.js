@@ -1,3 +1,8 @@
+// TODO: advanced content, focus on
+  // redoing using SQL
+  // adding a sibling component to the front end
+    // ie, grandchild component - like a start icon next to each repo name, that triggers that repo to get added to a starred component list (sibling component)
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
