@@ -2,11 +2,11 @@
   "name": "fullstack-review",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "private": true,
   "scripts": {
     "react-dev": "./node_modules/.bin/webpack -w",
-    "server-dev": "./node_modules/.bin/nodemon -w server.js"
+    "server-dev": "nodemon -w ./server.js"
   },
   "repository": {
     "type": "git",
