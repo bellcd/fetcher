@@ -10,8 +10,6 @@ db.once('open', () => {
 
 // TODO: add handling for a database connection error
 let repoSchema = mongoose.Schema({
-  // TODO: your schema here!
-
   id: Number,
   name: String,
   updated_at: { type: Date }, // TODO: this will be the value to filter top25 most recent repos on ...
@@ -34,29 +32,8 @@ let save = (repos, callback) => {
   // TODO: feels like Mongoose would have a prebuilt solution for checking for duplicates when adding a collection of documents ...
 
   // map to a new array of objects with only the properties I want
-  // recursive fn
-    // base case, array of objects to check is empty, call final callback
-    // recursive case
-      // invoke findOne() with if conditionals for updateOne()
-        // if data is null, document does NOT exist
-          // invoke create() with the current document
-          // in create's callback, invoke recursiveFn with the array of objects minus the one we just dealt with
-        // else if data is a document
-          // if document's updated_at property is NOT equal to this obj's updated_at property, the document needs to be updated
-            // invoke update() with the current document
-            // in update's callback, invoke recursiveFn with the array of objects minus the one we just dealt with
-          // else if updated both updated_at properties are equal, the obj is a duplicate of an already existing document
-            // invoke recursiveFn with the array of objects minus the one we just dealt with
-
-
-  const recursiveFn = () => {
-
-  }
-
-  for (let i = 0; i < repos.length; i++) {
-    let repo = repos[i];
-
-    let doc = {
+  const objects = repos.map(repo => {
+    return {
       id: repo.id,
       name: repo.name,
       updated_at: repo.updated_at,
@@ -67,39 +44,58 @@ let save = (repos, callback) => {
       owner_html_url: repo.owner.html_url,
       owner_avatar_url: repo.owner.avatar_url
     }
+  });
 
-    // OPTION 1, possible to send responses back to the front end after each callback finishes??
-    // OPTION 2, can the array that Mongoose's Repo.create() accepts handle null OR {} as elements??
-    // OPTION 3 ???
+  // recursive fn
+  // TODO: this fn mutates the objects array that it is passed ... better workflow???
+  const recursiveFn = (objects, callback) => {
+    // base case, array of objects to check is empty, call final callback
+    if (objects.length === 0) {
+      callback(); // TODO: what to send back to the POST route??
+    } else {
+      // recursive case
 
-
-    Repo.findOne({ id: doc.id }, (err, data) => {
-      if (err) { return console.log(err); }
-
-      // the db doesn't already contain a document for that repo, so add it to the array that will get added to the db
-      if (data === null) {
-        docs.push(doc);
-
-      // TODO: Refactor to use a Mongo composite key
-      } else {
-        // the repo already exists in the db, check if the updated_at date of the document in the db matches the updated_at date of the object coming in from the API call
-        if (data.updated_at === doc.updated_at) {
-          // it's the same repo, do nothing
-        } else {
-          // the repo has been updated, replace the document in the db with the new document from the API call
-          Repo.updateOne({ id: doc.id }, data) ;
+      // invoke findOne() for the first element in the objects array
+      Repo.findOne({ id: objects[0].id }, (err, data) => {
+        if (err) {
+          console.log(err);
+          recursiveFn(objects.slice(1), callback);
+          return;
         }
-      }
 
-      // we've filtered the list of repos to only non-duplicates, so now we can add them to the db
-      if (i === repos.length - 1) {
-        Repo.create(docs, (err, ...docs) => {
-          if (err) { return callback(err, null); }
-          callback(null, docs);
-        });
-      };
-    });
+        // if data is null, document does NOT exist
+        if (data === null) {
+          // invoke create() with the current object
+          Repo.create(objects[0], (err) => {
+            if (err) console.log(err);
+
+            // in create's callback, invoke recursiveFn with the array of objects minus the one we just dealt with
+            recursiveFn(objects[0].slice(1), callback);
+          });
+
+        // TODO: Refactor to use a Mongo composite key
+        } else {
+          // else if data is a document
+          // if document's updated_at property is NOT equal to this obj's updated_at property, the document needs to be updated
+          if (data.updated_at !== objects[0].updated_at) {
+            // invoke updateOne() with the current document
+            Repo.updateOne({ id: objects[0].id }, objects[0], (err) => {
+              if (err) console.log(err);
+
+              // in updateOne's callback, invoke recursiveFn with the array of objects minus the one we just dealt with
+              recursiveFn(objects.slice(1), callback);
+            });
+          } else {
+            // else, both updated_at properties are equal, the obj is a duplicate of an already existing document
+            // invoke recursiveFn with the array of objects minus the one we just dealt with
+            recursiveFn(obejcts.slice(1), callback);
+          }
+        }
+      });
+    }
   }
+
+  recursiveFn(objects, callback);
 }
 
 let find = (callback) => {
