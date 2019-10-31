@@ -40,11 +40,7 @@ const addRepo = (repo, tableToMatch, callback) => {
   ({ id, name, html_url, description, updated_at, language } = repo);
   const id_owner = repo.owner.id;
 
-  // const id = repo.id;
-  // const name = repo.name;
-  // const html_url = html_url
-
-  connection.query(`INSERT INTO ${tableToMatch} (id, name, html_url, description, updated_at, language, id_owner) values (?, ?, ?, ?, ?, ?, ?)`, [id, name, html_url, description, updated_at, language, id_owner], (err, rows, fields) => {
+  connection.query(`INSERT INTO ${tableToMatch} (id, name, html_url, description, updated_at, language, id_owner) values (?, ?, ?, ?, ?, ?, ?)`, [id, name, html_url, description, new Date(updated_at), language, id_owner], (err, rows, fields) => {
     if (err) { throw err; }
     callback(null, rows);
   });

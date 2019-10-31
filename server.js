@@ -16,7 +16,7 @@ app.post('/repos', (req, res, next) => {
   helpers.fetchRepos(req.body.username, (err, repos) => {
     if (err) { res.status(400).send(err); }
 
-    // TODO: test for one returned repo for now ...
+    // TODO: do this for each repo that was fetched from the API call ...
     db.addUser(repos[0].owner, 'users', (err, rows) => {
       if (err) { throw err; }
 
@@ -27,6 +27,7 @@ app.post('/repos', (req, res, next) => {
       })
     })
 
+    // TODO: not needed here ??
     db.get({ login: 'christian' }, 'users', (err, rows) => {
       // TODO: save repos to the db ...
       if (err) { res.status(400).send(err); }
