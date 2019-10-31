@@ -31,7 +31,6 @@ class App extends React.Component {
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({ username: this.state.username }),
-      dataType: 'application/json',
       success: (res) => {
         console.log('username search successfully sent.')
       },

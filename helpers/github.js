@@ -1,5 +1,5 @@
 const rp = require('request-promise');
-const config = require('./config.js');
+const config = require('../config.js');
 
 module.exports = {
   fetchRepos: (username) => {
@@ -10,16 +10,16 @@ module.exports = {
       json: true,
       headers: {
         'User-Agent': 'Request-Promise', // TODO: is this header needed?
-        'Authorization: token': config.PERSONAL_ACCESS_TOKEN
+        'Authorization': `token ${config.TOKEN}`
       }
-    ;}
+    };
 
-    rp(options)
+    return rp(options)
       .then(repos => {
-
+        return repos;
       })
       .catch(err => {
-        console.log(err);
+        throw err;
       })
   }
 }
