@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Repos from './repos.jsx';
+import $ from 'jquery';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class App extends React.Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
+    this.getRepos = this.getRepos.bind(this);
   }
 
   handleChange(e) {
@@ -22,8 +24,21 @@ class App extends React.Component {
     });
   }
 
-  searchForUsername() {
+  getRepos() {
     // TODO: ...
+    $.ajax({
+      url: `http://localhost:1128/repos`,
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({ username: this.state.username }),
+      dataType: 'application/json',
+      success: (res) => {
+        console.log('username search successfully sent.')
+      },
+      error: (err) => {
+        if (err) { console.log(err); }
+      }
+    })
   }
 
   render() {
@@ -32,9 +47,10 @@ class App extends React.Component {
         <div>GitHub Repos</div>
         <Repos repos={this.state.repos}></Repos>
         <div>
-          <label for="username">User to search for</label>
+          <label htmlFor="username">User to search for</label>
           <input id="username" name="username" type="text" onChange={this.handleChange}></input>
         </div>
+        <button onClick={this.getRepos}>Get Repos</button>
       </>
     )
   }
