@@ -1,10 +1,10 @@
-const rp = require('request-promise');
+// TODO: refactor to use request-promise package??
+
+const request = require('request');
 const config = require('../config.js');
 
 module.exports = {
-  fetchRepos: (username) => {
-    // TODO: remember to return a promise with the results!
-
+  fetchRepos: (username, callback) => {
     const options = {
       uri: `https://api.github.com/users/${username}/repos`,
       json: true,
@@ -14,12 +14,9 @@ module.exports = {
       }
     };
 
-    return rp(options)
-      .then(repos => {
-        return repos;
-      })
-      .catch(err => {
-        throw err;
-      })
+    request(options, (err, repos) => {
+      if (err) { return callbak(err, null); }
+      callback(null, repos);
+    });
   }
 }

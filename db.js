@@ -1,15 +1,32 @@
+// TODO: change to use promise based mysql package??
+
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  databse: 'fetcher',
+  database: 'fetcher',
 });
 
 connection.connect((err) => {
-  if (err) { throw(err); }
-
-  console.log(`Connected to MySQL as id ${connection.threadId}`);
+  if (err) { throw err; }
+  console.log(`Connected to MySQL as id ${connection.threadId}`)
 });
 
-module.exports.connection = connection;
+const get = (fieldToMatch, tableToMatch, callback) => {
+  const entries = Object.entries(fieldToMatch); // TODO: assumes we're matching on only one field ...
+
+  const field = entries[0][0];
+  const value = entries[0][1];
+
+  connection.query(`SELECT * FROM ${tableToMatch} WHERE ${field} = ?`, [value], (err, rows, fields) => {
+    if (err) { return callback(err, null); }
+    callback(null, rows);
+  });
+}
+// "SELECT * FROM 'users' WHERE 'login' = 'christian'"
+
+module.exports = {
+  connection: connection,
+  get
+}
