@@ -6,6 +6,7 @@ const cors = require('cors');
 const PORT = 1128;
 
 const helpers = require('./helpers/github.js');
+const db = require('./db.js');
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'client/dist')));
