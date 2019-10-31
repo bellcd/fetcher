@@ -24,9 +24,35 @@ const get = (fieldToMatch, tableToMatch, callback) => {
     callback(null, rows);
   });
 }
-// "SELECT * FROM 'users' WHERE 'login' = 'christian'"
+
+// TODO: make this function more generic
+const addUser = (user, tableToMatch, callback) => {
+  ({ id, login, avatar_url, html_url } = user);
+
+  connection.query(`INSERT INTO ${tableToMatch} (id, login, avatar_url, html_url) values (?, ?, ?, ?)`, [id, login, avatar_url, html_url], (err, rows, fields) => {
+    if (err) { throw err; }
+    callback(null, rows);
+  })
+}
+
+// TODO: make this functions more generic
+const addRepo = (repo, tableToMatch, callback) => {
+  ({ id, name, html_url, description, updated_at, language } = repo);
+  const id_owner = repo.owner.id;
+
+  // const id = repo.id;
+  // const name = repo.name;
+  // const html_url = html_url
+
+  connection.query(`INSERT INTO ${tableToMatch} (id, name, html_url, description, updated_at, language, id_owner) values (?, ?, ?, ?, ?, ?, ?)`, [id, name, html_url, description, updated_at, language, id_owner], (err, rows, fields) => {
+    if (err) { throw err; }
+    callback(null, rows);
+  });
+}
 
 module.exports = {
   connection: connection,
-  get
+  get,
+  addUser,
+  addRepo
 }

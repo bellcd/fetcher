@@ -14,9 +14,9 @@ module.exports = {
       }
     };
 
-    request(options, (err, repos) => {
+    request(options, (err, response, body) => {
       if (err) { return callbak(err, null); }
-      callback(null, repos);
+      callback(null, body);
     });
   }
 }
