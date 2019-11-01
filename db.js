@@ -30,6 +30,31 @@ const get = (fieldToMatch, tableToMatch, callback) => {
   // updating the fields in an existing record
 // use these new functions instead of / in addition to the below functions ...
 
+// dataToAdd is an object of the { fieldNames: data } you want to add to the table. ie, { name: 'Christian', id: 1, fav_food: 'tacos' }
+// table is the string name of the table to add this data to
+const addRecord = (dataToAdd, table) => {
+  const fieldNames = [];
+  const values = [];
+  const questionMarks = [];
+
+  for (let key in dataToAdd) {
+    fieldNames.push(key);
+    values.push(dataToAdd[key]);
+    questionMarks.push('?');
+  }
+
+  // join fieldNames & questionMarks on ", "
+  const joinedFieldNames = fieldNames.join(', ');
+  const joinedQuestionMarks = questionMarks.join(', ');
+
+  connection.query(`INSERT INTO ${table} (${joinedFieldNames}) VALUES (${joinedQuestionMarks})`, [values], (err, rows, fields) => {
+    if (err) { throw err; }
+
+  });
+}
+
+const updateRecord =
+
 
 // TODO: change this to accept any ???
 const addOrUpdateUser = (user, tableToMatch, callback) => {
