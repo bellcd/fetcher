@@ -25,16 +25,27 @@ const get = (fieldToMatch, tableToMatch, callback) => {
   });
 }
 
-// TODO: make this function more generic
+// TODO: add seperate functions for
+  // adding a record
+  // updating the fields in an existing record
+// use these new functions instead of / in addition to the below functions ...
+
+
+// TODO: change this to accept any ???
 const addOrUpdateUser = (user, tableToMatch, callback) => {
-  ({ id, login, avatar_url, html_url } = user);
+  if (tableToMatch === 'user') {
+    ({ id, login, avatar_url, html_url } = user);
+  } else if (tableToMatch = 'repo') {
+    ({ id, name, html_url, description, updated_at, language } = repo);
+    var id_owner = repo.owner.id;
+  }
 
   // check if a record with this id exists
   connection.query(`SELECT id FROM ${tableToMatch} WHERE id = ?`, [id], (err, rows, fields) => {
     if (err) { throw err; }
 
     if (rows.length > 0) {
-      // this user already exists, so update their record
+      // this id already exists, so update their record
       connection.query(`UPDATE ${tableToMatch}
         SET
           login = ?,
@@ -56,7 +67,7 @@ const addOrUpdateUser = (user, tableToMatch, callback) => {
 }
 
 // TODO: make this functions more generic
-const addRepo = (repo, tableToMatch, callback) => {
+const addOrUpdateRepo = (repo, tableToMatch, callback) => {
   ({ id, name, html_url, description, updated_at, language } = repo);
   const id_owner = repo.owner.id;
 
@@ -66,20 +77,22 @@ const addRepo = (repo, tableToMatch, callback) => {
   });
 }
 
-const addOrUpdateManyUsers = (usersToAdd, tableToMatch, finalCallback) => {
+const addOrUpdateManyUsers = (collectionToAddOrUpdate, tableToMatch, finalCallback) => {
+  const fn = tableToMath = 'user' ? addOrUpdateUser : addOrUpdateRepo;
+
   // base case
-    // usersToAdd length is 0, invoke finalCallback
-    if (usersToAdd.length === 0) {
+    // collectionToAddOrUpdate length is 0, invoke finalCallback
+    if (collectionToAddOrUpdate.length === 0) {
       return finalCallback();
     }
   // recursive case
-    // save & remove from usersToAdd the first user in usersToAdd
-    const user = usersToAdd.shift();
+    // save & remove from collectionToAddOrUpdate the first user in collectionToAddOrUpdate
+    const element = collectionToAddOrUpdate.shift();
 
-    // invoke addOrUpdateUser with that user. addOrUpdateUser's callback will be addOrUpdateManyUsers with - the now 1 shorter - usersToAdd array
-    addOrUpdateUser(user, tableToMatch, (err, rows) => {
+    // invoke fn with that element. fn's callback will be addOrUpdateManyUsers with - the now 1 shorter - collectionToAddOrUpdate array
+    fn(element, tableToMatch, (err, rows) => {
       if (err) { throw err; }
-      addOrUpdateManyUsers(usersToAdd, tableToMatch, finalCallback);
+      addOrUpdateManyUsers(collectionToAddOrUpdate, tableToMatch, finalCallback);
     });
 }
 
@@ -87,6 +100,6 @@ module.exports = {
   connection: connection,
   get,
   addOrUpdateUser,
-  addRepo,
+  addOrUpdateRepo,
   addOrUpdateManyUsers
 }

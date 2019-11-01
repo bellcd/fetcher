@@ -20,7 +20,10 @@ app.post('/repos', (req, res, next) => {
     const users = repos.map(repo => repo.owner)
 
     db.addOrUpdateManyUsers(users, 'users', () => {
-      console.log('finished!');
+      console.log('finished adding user');
+      db.addOrUpdateManyUsers(repos, 'repos', () => {
+        console.log('finished adding repos');
+      })
     })
 
     // // TODO: do this for each repo that was fetched from the API call ...
