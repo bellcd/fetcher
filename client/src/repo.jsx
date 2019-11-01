@@ -1,8 +1,9 @@
 import React from 'react';
 
 const Repo = ({ repo }) => {
+  console.log('repo: ', repo);
   return (
-    {repo}
+    <div>{repo.name}</div>
   );
 }
 

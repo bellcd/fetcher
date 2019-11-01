@@ -31,7 +31,6 @@ class App extends React.Component {
       method: 'GET',
       dataType: 'json',
       success: (res) => {
-        console.log(`data received ${res}`)
         this.setState({
           repos: res
         })
