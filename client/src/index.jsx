@@ -15,7 +15,8 @@ class App extends React.Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
-    this.getRepos = this.getRepos.bind(this);
+    this.searchForUser = this.searchForUser.bind(this);
+    this.fetchRepos = this.fetchRepos.bind(this);
   }
 
   handleChange(e) {
@@ -24,7 +25,24 @@ class App extends React.Component {
     });
   }
 
-  getRepos() {
+  fetchRepos() {
+    $.ajax({
+      url: `http://localhost:1128/repos`,
+      method: 'GET',
+      dataType: 'json',
+      success: (res) => {
+        console.log(`data received ${res}`)
+        this.setState({
+          repos: res
+        })
+      },
+      error: (err) => {
+        console.log(`error: ${err}`)
+      }
+    })
+  }
+
+  searchForUser() {
     // TODO: ...
     $.ajax({
       url: `http://localhost:1128/repos`,
@@ -33,6 +51,7 @@ class App extends React.Component {
       data: JSON.stringify({ username: this.state.username }),
       success: (res) => {
         console.log('username search successfully sent.')
+        this.fetchRepos();
       },
       error: (err) => {
         if (err) { console.log(err); }
@@ -49,7 +68,7 @@ class App extends React.Component {
           <label htmlFor="username">User to search for</label>
           <input id="username" name="username" type="text" onChange={this.handleChange}></input>
         </div>
-        <button onClick={this.getRepos}>Get Repos</button>
+        <button onClick={this.searchForUser}>Get Repos</button>
       </>
     )
   }

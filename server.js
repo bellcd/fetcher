@@ -44,12 +44,21 @@ app.post('/repos', (req, res, next) => {
       console.log('finished adding or updating users');
       db.addOrUpdateManyRecords(repos, 'repos', () => {
         console.log('finished adding repos');
+        res.status(200).send();
       })
     })
 
     // TODO: need to test code for updating repos ...
     // TODO: need to return either a positive or negative status code
   });
+});
+
+app.get('/repos', (req, res, next) => {
+  db.connection.query(`SELECT * FROM repos`, null, (err, repos, fields) => {
+    if (err) { throw err; }
+
+    res.status(200).send(JSON.stringify(repos));
+  })
 });
 
 app.listen(PORT, () => { console.log(`App is running on port ${PORT}`)});

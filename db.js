@@ -19,7 +19,7 @@ const get = (fieldToMatch, table, callback) => {
   const field = entries[0][0];
   const value = entries[0][1];
 
-  connection.query(`SELECT * FROM ${table} WHERE ${field} = ?`, [value], (err, rows, fields) => {
+  connection.query(`SELECT * from ${table} WHERE ${field} = ?`, [value], (err, rows, fields) => {
     if (err) { return callback(err, null); }
     callback(null, rows);
   });
@@ -69,12 +69,12 @@ const updateRecord = (dataThatWillOverwrite, table, callback, dataToMatchOn) => 
   for (let field in dataThatWillOverwrite) {
     value = dataThatWillOverwrite[field];
 
-    if (typeof value === 'string') {
-      value = `'${value}'`
+    if (!Number.isNaN(Date.parse(value))) { // TODO: better way of handling this date??
+      value = `'${value.slice(0,10)}'`;
+    } else if (typeof value === 'string') {
+      value = `${connection.escape(value)}`
     } else if (Number(value) === value) {
       // value stays as it is ...
-    } else if (!Number.isNaN(Date.parse(value))) { // TODO: better way than using Date.parse ??
-      value = new Date(value);
     }
 
     assignmentList += `, ${field} = ${value}`
@@ -82,6 +82,8 @@ const updateRecord = (dataThatWillOverwrite, table, callback, dataToMatchOn) => 
 
   // remove the first comma from assignmentList
   assignmentList = assignmentList.slice(1);
+
+  console.log('assignmentList: ', assignmentList);
 
   connection.query(`UPDATE ${table} SET ${assignmentList} WHERE ${field} = ${valueForMatch}`, null, (err, rows, fields) => {
     if (err) { throw err; }
