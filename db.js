@@ -69,7 +69,7 @@ const updateRecord = (dataThatWillOverwrite, table, callback, dataToMatchOn) => 
   for (let field in dataThatWillOverwrite) {
     value = dataThatWillOverwrite[field];
 
-    if (!Number.isNaN(Date.parse(value))) { // TODO: better way of handling this date??
+    if (typeof value === 'string' && !Number.isNaN(Date.parse(value))) { // TODO: better way of handling this date??
       value = `'${value.slice(0,10)}'`;
     } else if (typeof value === 'string') {
       value = `${connection.escape(value)}`

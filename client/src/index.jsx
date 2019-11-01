@@ -25,6 +25,10 @@ class App extends React.Component {
     });
   }
 
+  componentDidMount() {
+    this.fetchRepos();
+  }
+
   fetchRepos() {
     $.ajax({
       url: `http://localhost:1128/repos`,

@@ -55,11 +55,9 @@ app.get('/repos', (req, res, next) => {
   db.connection.query(`SELECT * FROM repos`, null, (err, repos, fields) => {
     if (err) { throw err; }
 
+    // TODO: better way to handle this than sorting every repo in the db on every /repos GET ??
     // sort the repos so the earliest dates are at the beginning of the array
     repos.sort((a, b) => {
-      // console.log('a.updated_at: ', a.updated_at);
-      // console.log('b.updated_at: ', b.updated_at);
-
       if (a.updated_at < b.updated_at) {
         return 1;
       } else if (a.updated_at > b.updated_at) {
@@ -69,7 +67,7 @@ app.get('/repos', (req, res, next) => {
       }
     })
     // return only the first 25 elements in the array
-    res.status(200).send(JSON.stringify(repos));
+    res.status(200).send(JSON.stringify(repos.slice(0, 25)));
   })
 });
 

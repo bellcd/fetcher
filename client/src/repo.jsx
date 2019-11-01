@@ -4,8 +4,8 @@ const Repo = ({ repo }) => {
   console.log('repo: ', repo);
   return (
     <>
-      <div>
-      <span>{repo.name}</span>
+      <div className="repo">
+      <span><a href={repo.html_url}>{repo.name}</a></span>
       <span>{repo.updated_at}</span>
       </div>
     </>
