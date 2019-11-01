@@ -17,11 +17,32 @@ app.post('/repos', (req, res, next) => {
     if (err) { res.status(400).send(err); }
 
     // map repos to an array of users
-    const users = repos.map(repo => repo.owner)
+    // TODO: move all of this logic elsewhere ??
+    const users = repos.map(repo => {
+      return {
+        id: repo.owner.id,
+        login: repo.owner.login,
+        avatar_url: repo.owner.avatar_url,
+        html_url: repo.owner.html_url
+      }
+    });
 
-    db.addOrUpdateManyUsers(users, 'users', () => {
-      console.log('finished adding user');
-      db.addOrUpdateManyUsers(repos, 'repos', () => {
+    // map repos to only the data I need
+    repos = repos.map(repo => {
+      return {
+        id: repo.id,
+        name: repo.name,
+        html_url: repo.html_url,
+        description: repo.description,
+        updated_at: repo.updated_at,
+        language: repo.language,
+        id_owner: repo.owner.id
+      }
+    });
+
+    db.addOrUpdateManyRecords(users, 'users', () => {
+      console.log('finished adding or updating users');
+      db.addOrUpdateManyRecords(repos, 'repos', () => {
         console.log('finished adding repos');
       })
     })
