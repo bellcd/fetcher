@@ -3,7 +3,12 @@ import React from 'react';
 const Repo = ({ repo }) => {
   console.log('repo: ', repo);
   return (
-    <div>{repo.name}</div>
+    <>
+      <div>
+      <span>{repo.name}</span>
+      <span>{repo.updated_at}</span>
+      </div>
+    </>
   );
 }
 
