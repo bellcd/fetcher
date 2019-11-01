@@ -16,26 +16,33 @@ app.post('/repos', (req, res, next) => {
   helpers.fetchRepos(req.body.username, (err, repos) => {
     if (err) { res.status(400).send(err); }
 
-    // TODO: do this for each repo that was fetched from the API call ...
-    db.addUser(repos[0].owner, 'users', (err, rows) => {
-      if (err) { throw err; }
+    // map repos to an array of users
+    const users = repos.map(repo => repo.owner)
 
-      db.addRepo(repos[0], 'repos', (err, rows) => {
-        if (err) { throw err; }
-
-        res.status(200).send(`${rows.length} repos added`);
-      })
+    db.addOrUpdateManyUsers(users, 'users', () => {
+      console.log('finished!');
     })
 
-    // TODO: not needed here ??
-    db.get({ login: 'christian' }, 'users', (err, rows) => {
-      // TODO: save repos to the db ...
-      if (err) { res.status(400).send(err); }
+    // // TODO: do this for each repo that was fetched from the API call ...
+    // db.addUser(repos[0].owner, 'users', (err, rows) => {
+    //   if (err) { throw err; }
 
-      // TODO: need to return either a positive or negative status code
+    //   db.addRepo(repos[0], 'repos', (err, rows) => {
+    //     if (err) { throw err; }
 
-      console.log(`rows`, rows);
-    });
+    //     res.status(200).send(`${rows.length} repos added`);
+    //   })
+    // })
+
+    // // TODO: not needed here ??
+    // db.get({ login: 'christian' }, 'users', (err, rows) => {
+    //   // TODO: save repos to the db ...
+    //   if (err) { res.status(400).send(err); }
+
+    //   // TODO: need to return either a positive or negative status code
+
+    //   console.log(`rows`, rows);
+    // });
 
 
   });

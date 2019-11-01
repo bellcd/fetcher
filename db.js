@@ -26,13 +26,33 @@ const get = (fieldToMatch, tableToMatch, callback) => {
 }
 
 // TODO: make this function more generic
-const addUser = (user, tableToMatch, callback) => {
+const addOrUpdateUser = (user, tableToMatch, callback) => {
   ({ id, login, avatar_url, html_url } = user);
 
-  connection.query(`INSERT INTO ${tableToMatch} (id, login, avatar_url, html_url) values (?, ?, ?, ?)`, [id, login, avatar_url, html_url], (err, rows, fields) => {
+  // check if a record with this id exists
+  connection.query(`SELECT id FROM ${tableToMatch} WHERE id = ?`, [id], (err, rows, fields) => {
     if (err) { throw err; }
-    callback(null, rows);
-  })
+
+    if (rows.length > 0) {
+      // this user already exists, so update their record
+      connection.query(`UPDATE ${tableToMatch}
+        SET
+          login = ?,
+          avatar_url = ?,
+          html_url = ?
+        WHERE id = ?`,
+        [login, avatar_url, html_url, id], (err, rows, fields) => {
+          if (err) { throw err; }
+          callback(null, rows);
+        })
+    } else {
+      // the user doesn't exist, so create a record
+      connection.query(`INSERT INTO ${tableToMatch} (id, login, avatar_url, html_url) values (?, ?, ?, ?)`, [id, login, avatar_url, html_url], (err, rows, fields) => {
+        if (err) { throw err; }
+        callback(null, rows);
+      });
+    }
+  });
 }
 
 // TODO: make this functions more generic
@@ -46,9 +66,27 @@ const addRepo = (repo, tableToMatch, callback) => {
   });
 }
 
+const addOrUpdateManyUsers = (usersToAdd, tableToMatch, finalCallback) => {
+  // base case
+    // usersToAdd length is 0, invoke finalCallback
+    if (usersToAdd.length === 0) {
+      return finalCallback();
+    }
+  // recursive case
+    // save & remove from usersToAdd the first user in usersToAdd
+    const user = usersToAdd.shift();
+
+    // invoke addOrUpdateUser with that user. addOrUpdateUser's callback will be addOrUpdateManyUsers with - the now 1 shorter - usersToAdd array
+    addOrUpdateUser(user, tableToMatch, (err, rows) => {
+      if (err) { throw err; }
+      addOrUpdateManyUsers(usersToAdd, tableToMatch, finalCallback);
+    });
+}
+
 module.exports = {
   connection: connection,
   get,
-  addUser,
-  addRepo
+  addOrUpdateUser,
+  addRepo,
+  addOrUpdateManyUsers
 }
