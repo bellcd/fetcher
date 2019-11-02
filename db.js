@@ -2,11 +2,14 @@
 
 const mysql = require('mysql');
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  database: 'fetcher',
-});
+// const connection = mysql.createConnection({
+//   host: process.env.JAWSDB_URL,
+//   user: `root`,
+//   database: 'fetcher',
+// });
+
+// this assumes we're connection to the Heroku hosted JawsDB database ... ie, through the **heroku local open** command, and not directly visiting local host ...
+const connection = mysql.createConnection(process.env.JAWSDB_URL);
 
 connection.connect((err) => {
   if (err) { throw err; }
