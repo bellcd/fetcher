@@ -29,7 +29,6 @@ class App extends React.Component {
   }
 
   fetchRepos() {
-    debugger;
     $.ajax({
       url: `${this.state.url}/repos`,
       method: 'GET',
@@ -46,8 +45,6 @@ class App extends React.Component {
   }
 
   searchForUser() {
-    debugger;
-    // TODO: ...
     $.ajax({
       url: `${this.state.url}/repos`,
       method: 'POST',
