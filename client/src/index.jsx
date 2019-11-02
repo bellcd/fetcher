@@ -9,9 +9,8 @@ class App extends React.Component {
 
     this.state = {
       username: '',
-      repos: [
-
-      ]
+      url: `https://infinite-dusk-78362.herokuapp.com`,
+      repos: []
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -30,8 +29,9 @@ class App extends React.Component {
   }
 
   fetchRepos() {
+    debugger;
     $.ajax({
-      url: `http://localhost:1128/repos`,
+      url: `${this.state.url}/repos`,
       method: 'GET',
       dataType: 'json',
       success: (res) => {
@@ -46,9 +46,10 @@ class App extends React.Component {
   }
 
   searchForUser() {
+    debugger;
     // TODO: ...
     $.ajax({
-      url: `http://localhost:1128/repos`,
+      url: `${this.state.url}/repos`,
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({ username: this.state.username }),

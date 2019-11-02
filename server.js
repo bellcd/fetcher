@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const port = process.env.PORT ? process.env.PORT : 1128;
+const port = process.env.PORT ? process.env.PORT : 5000;
 
 const helpers = require('./helpers/github.js');
 const db = require('./db.js');
