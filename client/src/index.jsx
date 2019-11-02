@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Repos from './repos.jsx';
 import $ from 'jquery';
+import envVars from '../../env-vars.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class App extends React.Component {
 
     this.state = {
       username: '',
-      url: `https://infinite-dusk-78362.herokuapp.com`,
+      url: envVars.url,
       repos: []
     }
 
