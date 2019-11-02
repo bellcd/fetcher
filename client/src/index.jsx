@@ -63,7 +63,7 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <div>GitHub Repos</div>
+        <div>Fetching GitHub Repos</div>
         <Repos repos={this.state.repos}></Repos>
         <div>
           <label htmlFor="username">User to search for</label>
