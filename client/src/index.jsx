@@ -9,7 +9,7 @@ class App extends React.Component {
 
     this.state = {
       username: '',
-      url: `${process.evn.LOCAL_URL ? process.env.LOCAL_URL + ':' + process.env.LOCAL_PORT : 'https://infinite-dusk-78362.herokuapp.com'}`,
+      url: `${process.env.LOCAL_URL ? process.env.LOCAL_URL + ':' + process.env.LOCAL_PORT : 'https://infinite-dusk-78362.herokuapp.com'}`,
       repos: []
     }
 
