@@ -70,7 +70,8 @@ const updateRecord = (dataThatWillOverwrite, table, callback, dataToMatchOn) => 
     value = dataThatWillOverwrite[field];
 
     if (typeof value === 'string' && !Number.isNaN(Date.parse(value))) { // TODO: better way of handling this date??
-      value = `'${value.slice(0,10)}'`;
+      value = `'${value.slice(0,10)}'`; // TODO: try changing schema to text to see what happens ...
+      // value = `'${value}'`;
     } else if (typeof value === 'string') {
       value = `${connection.escape(value)}`
     } else if (Number(value) === value) {

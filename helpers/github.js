@@ -9,7 +9,7 @@ module.exports = {
       uri: `https://api.github.com/users/${username}/repos`,
       json: true,
       headers: {
-        'User-Agent': 'Request-Promise', // TODO: is this header needed?
+        'User-Agent': 'Request-Promise', // TODO: remove and confirm still works.
         'Authorization': `token ${config.TOKEN}`
       }
     };
