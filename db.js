@@ -2,13 +2,17 @@
 
 const mysql = require('mysql');
 
-const connectionObject = {
-  host: 'localhost',
-  user: `root`,
-  database: 'fetcher',
-};
+let connection;
 
-const connection = mysql.createConnection(process.env.JAWSDB_URL || connectionObject);
+if (process.env.LOCAL_URL) {
+  connection = mysql.createConnection({
+    host: 'localhost',
+    user: `root`,
+    database: 'fetcher',
+  });
+} else {
+  connection = mysql.createConnection(process.env.JAWSDB_URL);
+}
 
 connection.connect((err) => {
   if (err) { throw err; }
