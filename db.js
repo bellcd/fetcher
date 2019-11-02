@@ -4,6 +4,7 @@ const mysql = require('mysql');
 
 let connection;
 
+// TODO: why is the local deployment connecting to the production database??
 if (process.env.LOCAL_URL) {
   connection = mysql.createConnection({
     host: 'localhost',
@@ -76,8 +77,8 @@ const updateRecord = (dataThatWillOverwrite, table, callback, dataToMatchOn) => 
     value = dataThatWillOverwrite[field];
 
     if (typeof value === 'string' && !Number.isNaN(Date.parse(value))) { // TODO: better way of handling this date??
-      value = `'${value.slice(0,10)}'`; // TODO: try changing schema to text to see what happens ...
-      // value = `'${value}'`;
+      // value = `'${value.slice(0,10)}'`; // TODO: try changing schema to DATETIME
+      value = `${connection.escape(value)}`;
     } else if (typeof value === 'string') {
       value = `${connection.escape(value)}`
     } else if (Number(value) === value) {

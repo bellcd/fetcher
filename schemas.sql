@@ -19,7 +19,7 @@ CREATE TABLE repos(
   name VARCHAR(255),
   html_url VARCHAR(255),
   description VARCHAR(255),
-  updated_at DATE,
+  updated_at DATETIME,
   language VARCHAR(255),
   id_owner INT,
   PRIMARY KEY (id),
