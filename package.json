@@ -4,6 +4,9 @@
   "description": "",
   "main": "server.js",
   "private": true,
+  "engines": {
+    "node": "10.16.3"
+  },
   "scripts": {
     "react-dev": "./node_modules/.bin/webpack -w",
     "server-dev": "nodemon -w ./server.js"

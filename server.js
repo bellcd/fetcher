@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const PORT = 1128;
+const port = process.env.PORT ? process.env.PORT : 1128;
 
 const helpers = require('./helpers/github.js');
 const db = require('./db.js');
@@ -71,4 +71,4 @@ app.get('/repos', (req, res, next) => {
   })
 });
 
-app.listen(PORT, () => { console.log(`App is running on port ${PORT}`)});
+app.listen(port, () => { console.log(`App is running on port ${port}`)});
