@@ -11,7 +11,7 @@ class App extends React.Component {
     if (process.env.API_URL) {
       url = `${process.env.API_URL}${process.env.API_PORT ? `:${process.env.API_PORT}` : ''}`;
     } else {
-      url = `https://infinite-dusk-78362.herokuapp.com/`;
+      url = `https://infinite-dusk-78362.herokuapp.com`;
     }
 
     this.state = {
