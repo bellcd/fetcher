@@ -1,7 +1,6 @@
 // TODO: refactor to use request-promise package??
 
 const request = require('request');
-// const config = require('../config.js');
 
 module.exports = {
   fetchRepos: (username, callback) => {
@@ -15,7 +14,7 @@ module.exports = {
     };
 
     request(options, (err, response, body) => {
-      if (err) { return callbak(err, null); }
+      if (err) { return callback(err, null); }
       callback(null, body);
     });
   }

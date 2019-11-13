@@ -9,7 +9,7 @@ class App extends React.Component {
 
     this.state = {
       username: '',
-      url: `${process.env.LOCAL_URL ? process.env.LOCAL_URL + ':' + process.env.LOCAL_PORT : 'https://infinite-dusk-78362.herokuapp.com'}`,
+      url: `${process.env.API_URL}${process.env.API_PORT ? `:${process.env.API_PORT}` : ''}`,
       repos: []
     }
 
@@ -28,8 +28,8 @@ class App extends React.Component {
     this.fetchRepos();
     console.log(this.state.url);
     console.log('process: ', process);
-    console.log('process.env.TEST: ', process.env.TEST);
-    console.log('process.env.MY_NAME: ', process.env.MY_NAME);
+    console.log('process.env.API_URL: ', process.env.API_URL);
+    console.log('process.env.API_PORT: ', process.env.API_PORT);
   }
 
   fetchRepos() {

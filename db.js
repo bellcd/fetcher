@@ -4,8 +4,10 @@ const mysql = require('mysql');
 
 let connection;
 
+console.log(process.env.API_URL);
+
 // TODO: why is the local deployment connecting to the production database??
-if (process.env.LOCAL_URL) {
+if (process.env.API_URL === 'http://localhost') {
   connection = mysql.createConnection({
     host: 'localhost',
     user: `root`,

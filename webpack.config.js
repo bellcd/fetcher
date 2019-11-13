@@ -1,10 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
+const dotenv = require('dotenv');
 
+module.exports = () => {
 
-// TODO: does specifying --env variables in a webpack npm script override those same environment variables defined in .env file??
-module.exports = (env) => {
+  // this will return an object with a parsed key (made from the .env file)
+  const env = dotenv.config().parsed;
 
+  // modifying and reducing that object to a JSON object
   const envVars = Object.entries(env).reduce((acc, currentValue) => {
     return Object.assign({ [`process.env.${currentValue[0]}`]: JSON.stringify(currentValue[1]) }, acc);
   }, {});
