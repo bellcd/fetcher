@@ -2,13 +2,22 @@ const path = require('path');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 
-module.exports = () => {
+module.exports = (env) => {
+  // depending on the setting of the production or development environments, only make certain environment variables available to the client
+
+  let finalPath;
+
+  if (env.ENVIRONMENT === 'production') {
+    finalPath = path.join(__dirname, '.env');
+  } else {
+    finalPath = path.join(__dirname, '.env.development');
+  }
 
   // this will return an object with a parsed key (made from the .env file)
-  const env = dotenv.config({ path: '.env.development' }).parsed;
+  const parsedEnv = dotenv.config({ path: finalPath }).parsed;
 
   // modifying and reducing that object to a JSON object
-  const envVars = Object.entries(env).reduce((acc, currentValue) => {
+  const envVars = Object.entries(parsedEnv).reduce((acc, currentValue) => {
     return Object.assign({ [`process.env.${currentValue[0]}`]: JSON.stringify(currentValue[1]) }, acc);
   }, {});
 

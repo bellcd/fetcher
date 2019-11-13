@@ -8,7 +8,8 @@
     "node": "10.16.3"
   },
   "scripts": {
-    "react-dev": "./node_modules/.bin/webpack --env.API_URL=http://localhost --env.API_PORT=5000 -w",
+    "react-dev": "./node_modules/.bin/webpack --env.ENVIRONMENT=development -w",
+    "build": "./node_modules/.bin/webpack --env.ENVIRONMENT=production",
     "server-dev": "nodemon -w ./server.js",
     "start": "node ./server.js"
   },
