@@ -6,20 +6,17 @@ module.exports = (env) => {
   // depending on the setting of the production or development environments, only make certain environment variables available to the client
 
   let finalPath;
+  let envVars = {};
 
-  if (env.ENVIRONMENT === 'production') {
-    finalPath = path.join(__dirname, '.env');
-  } else {
-    finalPath = path.join(__dirname, '.env.development');
+  if (env.ENVIRONMENT === 'development') {
+    // this will return an object with a parsed key (made from the .env file)
+    const parsedEnv = dotenv.config({ path: path.join(__dirname, '.env.development') }).parsed;
+
+    // modifying and reducing that object to a JSON object
+    envVars = Object.entries(parsedEnv).reduce((acc, currentValue) => {
+      return Object.assign({ [`process.env.${currentValue[0]}`]: JSON.stringify(currentValue[1]) }, acc);
+    }, {});
   }
-
-  // this will return an object with a parsed key (made from the .env file)
-  const parsedEnv = dotenv.config({ path: finalPath }).parsed;
-
-  // modifying and reducing that object to a JSON object
-  const envVars = Object.entries(parsedEnv).reduce((acc, currentValue) => {
-    return Object.assign({ [`process.env.${currentValue[0]}`]: JSON.stringify(currentValue[1]) }, acc);
-  }, {});
 
   console.log('envVars: ', envVars);
 
