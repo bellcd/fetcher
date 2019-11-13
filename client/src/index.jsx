@@ -26,6 +26,10 @@ class App extends React.Component {
 
   componentDidMount() {
     this.fetchRepos();
+    console.log(this.state.url);
+    console.log('process: ', process);
+    console.log('process.env.TEST: ', process.env.TEST);
+    console.log('process.env.MY_NAME: ', process.env.MY_NAME);
   }
 
   fetchRepos() {
