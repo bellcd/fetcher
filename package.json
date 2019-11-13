@@ -1,5 +1,5 @@
 {
-  "name": "fullstack-review",
+  "name": "fetcher",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -20,9 +20,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bellcd/rpt17-fullstack-review/issues"
+    "url": "https://github.com/bellcd/fetcher/issues"
   },
-  "homepage": "https://github.com/bellcd/rpt17-fullstack-review#readme",
+  "homepage": "https://github.com/bellcd/fetcher#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
