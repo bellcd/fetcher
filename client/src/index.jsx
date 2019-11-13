@@ -7,9 +7,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    let url;
+    if (process.env.API_URL) {
+      url = `${process.env.API_URL}${process.env.API_PORT ? `:${process.env.API_PORT}` : ''}`;
+    } else {
+      url = `https://infinite-dusk-78362.herokuapp.com/`;
+    }
+
     this.state = {
       username: '',
-      url: `${process.env.API_URL}${process.env.API_PORT ? `:${process.env.API_PORT}` : ''}`,
+      url: url,
       repos: []
     }
 
@@ -26,7 +33,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.fetchRepos();
-    console.log(this.state.url);
+    console.log('this.state.url: ', this.state.url);
     console.log('process: ', process);
     console.log('process.env.API_URL: ', process.env.API_URL);
     console.log('process.env.API_PORT: ', process.env.API_PORT);
