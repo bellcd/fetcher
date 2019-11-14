@@ -1,6 +1,14 @@
 // TODO: refactor to use request-promise package??
 
 const request = require('request');
+const API = require('../config.js');
+let TOKEN;
+
+if (process.env.TOKEN) {
+  TOKEN = process.env.TOKEN;
+} else {
+  TOKEN = API.TOKEN;
+}
 
 module.exports = {
   fetchRepos: (username, callback) => {
@@ -9,7 +17,7 @@ module.exports = {
       json: true,
       headers: {
         'User-Agent': 'Request-Promise', // TODO: remove and confirm still works.
-        'Authorization': `token ${process.env.TOKEN}`
+        'Authorization': `token ${TOKEN}`
       }
     };
 
