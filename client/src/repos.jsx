@@ -5,10 +5,12 @@ const Repos = ({ repos }) => {
   const repoList = repos.map(repo => <Repo key={repo.id} repo={repo}></Repo>);
 
   return (
-    <div className="repos">
-    <div>There are {repos.length} repos</div>
-    {repoList}
-    </div>
+    <>
+      <h4>There are {repos.length} repos</h4>
+      <div className="repos">
+        {repoList}
+      </div>
+    </>
 
   );
 }

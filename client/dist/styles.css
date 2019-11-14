@@ -2,15 +2,22 @@
   font-family: 'Tomorrow', sans-serif;
 }
 
+.repos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(10, 1fr);
+  grid-gap: 10px;
+  justify-items: stretch;
+  align-items: center;
+}
+
 .repo {
   box-shadow: 10px 10px 16px -3px rgba(0,0,0,0.3);
-  /* TODO: change these off of fixed widths  */
-  width: 300px;
-  height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  padding: 20px;
 }
 
 .card-title {
