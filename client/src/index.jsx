@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import Repos from './repos.jsx';
 import $ from 'jquery';
 
+import OptionsBar from './optionsbar.jsx';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -76,12 +78,12 @@ class App extends React.Component {
       <>
         <h1>Fetcher</h1>
         <h2>(It fetches info about Github Repos)</h2>
+        <OptionsBar
+          handleChange={this.handleChange}
+          handleSearchForUser={this.searchForUser}
+        >
+        </OptionsBar>
         <Repos repos={this.state.repos}></Repos>
-        <div>
-          <label htmlFor="username">User to search for</label>
-          <input id="username" name="username" type="text" onChange={this.handleChange}></input>
-        </div>
-        <button onClick={this.searchForUser}>Get Repos</button>
       </>
     )
   }

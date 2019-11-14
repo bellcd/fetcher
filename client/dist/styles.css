@@ -32,3 +32,8 @@
   font-weight: 300;
   font-style: italic;
 }
+
+.bar {
+  box-shadow: 10px 10px 16px -3px rgba(0,0,0,0.3);
+  padding: 20px;
+}
