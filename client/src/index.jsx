@@ -18,11 +18,13 @@ class App extends React.Component {
 
     this.state = {
       username: '',
+      limit: 10,
       url: url,
       repos: []
     }
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleLimitChange = this.handleLimitChange.bind(this);
     this.searchForUser = this.searchForUser.bind(this);
     this.fetchRepos = this.fetchRepos.bind(this);
   }
@@ -30,6 +32,12 @@ class App extends React.Component {
   handleChange(e) {
     this.setState({
       username: e.target.value
+    });
+  }
+
+  handleLimitChange(e) {
+    this.setState({
+      limit: e.target.value
     });
   }
 
@@ -45,6 +53,7 @@ class App extends React.Component {
     $.ajax({
       url: `${this.state.url}/repos`,
       method: 'GET',
+      data: { limit: this.state.limit },
       dataType: 'json',
       success: (res) => {
         this.setState({
@@ -79,7 +88,10 @@ class App extends React.Component {
         <h1>Fetcher</h1>
         <h2>(It fetches info about Github Repos)</h2>
         <OptionsBar
+          username={this.state.username}
           handleChange={this.handleChange}
+          limit={this.state.limit}
+          handleLimitChange={this.handleLimitChange}
           handleSearchForUser={this.searchForUser}
         >
         </OptionsBar>

@@ -66,8 +66,11 @@ app.get('/repos', (req, res, next) => {
         return 0;
       }
     })
-    // return only the first 25 elements in the array
-    res.status(200).send(JSON.stringify(repos.slice(0, 25)));
+
+    // TODO: this query parameter would need to be escaped properly
+    const limit = req.query.limit ? req.query.limit : 10;
+
+    res.status(200).send(JSON.stringify(repos.slice(0, limit)));
   })
 });
 
