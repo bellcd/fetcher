@@ -74,7 +74,8 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <div>Fetching GitHub Repos</div>
+        <h1>Fetcher</h1>
+        <h2>(It fetches info about Github Repos)</h2>
         <Repos repos={this.state.repos}></Repos>
         <div>
           <label htmlFor="username">User to search for</label>
